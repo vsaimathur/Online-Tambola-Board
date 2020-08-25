@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tambola</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- BOOTSTRAP - 4 START -->
+		<!-- BOOTSTRAP - 4 ENDS -->
+		<style>
+			.background
+			{
+				position: fixed;
+				left: 33.33%;
+				height: 93%;
+				width: 320px;
+				border: 2px solid grey	;
+				background-color: lightyellow;	
+			}
+			@media (max-width:500px)  {
+				body
+				{
+					background-color : lightyellow;
+				}
+				.background
+				{
+					left: 4.33%;
+					border: 0px solid grey; 					/*Adjusting background for mobiles*/
+
+				}
+			}
+			#completed_statement
+			{
+				top : 10%;
+				left : 30%;
+				font-size: 28px;
+				color:"red";
+				display: none;
+			}
+			/* LOADER IMAGE CSS CODE*/
+			/*.loader 	
+			{
+				position: fixed;
+				top: 20%;
+				left: 41%;
+				display: none;
+				border: 16px solid #f3f3f3;
+				border-radius: 50%;
+				border-top: 16px solid blue;
+				border-bottom: 16px solid blue;
+				width: 60px;
+				height: 60px;
+				-webkit-animation: spin 2s linear infinite;
+				animation: spin 2s linear infinite;
+			}
+			@-webkit-keyframes spin {
+		    0% { -webkit-transform: rotate(0deg); }
+			100% { -webkit-transform: rotate(360deg); }
+			}
+			@keyframes spin {
+			  0% { transform: rotate(0deg); }
+			  100% { transform: rotate(360deg); }
+			}*/
+			/* LOADER IMAGE CSS CODE ENDS */
+			#num_display
+			{
+				position: fixed;
+				top : 20%;
+				left: 41.5%;
+				font-size: 75px;
+				font-weight: bold;
+				display: none;	
+			}
+			@media (max-width: 500px)
+			{
+				#num_display
+				{
+					top : 16%;
+				}
+			}
+			#last_display
+			{
+				position: fixed;
+				top : 33%;
+				left : 39%;
+				font-size: 20px;
+				font-weight: bold;
+			}
+			@media (max-width:500px)  {
+				#last_display
+				{
+					left: 32%;					/*Adjusting last_display for mobiles*/
+				}
+			}
+			#num_gen
+			{
+				position: fixed;
+				top: 40%;
+				left: 40.5%;
+				height: 30px;
+				width: 100px;
+				border-radius: 10%;
+				background-color: lightgreen;
+			}
+			@media (max-width:500px)  {
+				#num_gen
+				{
+					left: 37%;								/*Adjusting generate button for mobiles*/
+				}
+			}
+			button
+			{
+				position: relative;
+				height : 30px;
+				width: 30px;
+				border: 1px,solid,lightyellow;
+				border-radius: 50%;
+				background-color: skyblue;
+				top : 50%;	
+				left: 3%;
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class = "background">
+			<!-- <div class = "loader"></div> -->
+			<span id = "completed_statement">The Game is Completed!!</span>
+			<span id = "num_display"></span>
+			<span id = "last_display"></span>
+			<button id = "num_gen" onclick="genDisplayNumber()">Generate</button>		
+		</div>
+		<script type="text/javascript">
+			var bgm = document.getElementsByClassName("background")[0];
+			for(i=1;i<=90;i++)
+			{
+				var button = document.createElement("button");
+				button.innerHTML = i;
+				bgm.appendChild(button);	
+			}
+			var arr = new Array();
+			var i,ld_no = 0;
+			for(i=0;i<90;i++) arr[i] = 0;
+			function sleep(ms)
+			{
+				var i;
+				var start = new Date();
+				for(i=0;i<1e7;i++)
+				{
+					if(new Date() - start >= ms) break;
+				}
+			}
+			function completed()
+			{
+				var i,sum = 0;
+				for(i=0;i<90;i++)
+				{
+					sum+=arr[i];
+				}
+				if(sum == 90)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			function genDisplayNumber()
+			{
+				if(ld_no != 0)
+				{
+					document.getElementById("last_display").innerHTML = ld_no;
+				}
+				var i;
+				if(completed())
+				{
+					document.getElementById("num_gen").style.display = "none";
+					document.getElementById("completed_statement").style.display = "inline";
+				}
+				else
+				{
+					var rand = Math.round(Math.random() * 100)%91;
+					// document.getElementsByClassName("loader")[0].style.display = 'inline';
+					document.getElementById("num_display").style.display = 'none';
+					while(arr[rand-1]==1 || rand==0)
+					{
+						rand = Math.round(Math.random() * 100)%91;
+					}
+					// document.getElementsByClassName("loader")[0].style.display = 'none';
+					document.getElementById("num_display").style.display = 'inline';
+					document.getElementsByTagName("button")[rand].style.backgroundColor = "red";
+					arr[rand-1] = 1;
+					document.getElementById("num_display").innerHTML = rand.toString();
+					ld_no = "Last Number: "+ rand.toString();
+				}
+			}
+		</script>
+	</body>
+</html>
